@@ -18,7 +18,7 @@ class FormButton extends StatelessWidget {
         duration: const Duration(milliseconds: 500),
         padding: const EdgeInsets.symmetric(vertical: Sizes.size16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.size5),
+          borderRadius: BorderRadius.circular(Sizes.size2),
           color: disabled ? Colors.grey.shade300 : Colors.black,
         ),
         child: AnimatedDefaultTextStyle(

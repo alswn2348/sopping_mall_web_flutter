@@ -1,5 +1,6 @@
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
+import 'package:e_commerce_flutter/features/authentication/sign_up_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Homescreen.routeName: (context) => const Homescreen(),
         LoginFormScreen.routeName: (context) => const LoginFormScreen(),
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
       },
     );
   }
