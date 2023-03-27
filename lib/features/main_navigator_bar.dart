@@ -2,6 +2,7 @@ import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MainNavigatorBar extends StatefulWidget {
   const MainNavigatorBar({
@@ -68,6 +69,6 @@ class _MainNavigatorBarState extends State<MainNavigatorBar> {
   }
 
   void _onLoginTap() {
-    Navigator.of(context).pushNamed(LoginFormScreen.routeName);
+    context.push(LoginFormScreen.routeName);
   }
 }

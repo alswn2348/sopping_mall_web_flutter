@@ -4,6 +4,7 @@ import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/form_button.dart';
 import 'package:http/http.dart' as http;
@@ -27,8 +28,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _formKey.currentState!.save();
 
         var response = await http.post(
-            Uri.parse("http://localhost:8080/register"),
-            body: jsonEncode(formData));
+          Uri.parse("http://121.172.36.156:8080/register"),
+          body: jsonEncode(formData),
+          headers: {"content-type": "application/json"},
+        );
         if (response.statusCode == 200) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
@@ -180,6 +183,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onLoginTap() {
-    Navigator.of(context).pushNamed(LoginFormScreen.routeName);
+    context.pop(LoginFormScreen.routeName);
   }
 }

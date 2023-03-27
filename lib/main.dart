@@ -1,7 +1,5 @@
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
-import 'package:e_commerce_flutter/features/authentication/sign_up_screen.dart';
-import 'package:e_commerce_flutter/features/home_screen.dart';
+import 'package:e_commerce_flutter/router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +11,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       theme: ThemeData(
         textTheme: const TextTheme(
           displayLarge: TextStyle(
@@ -36,12 +35,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       title: 'shopping mall',
-      initialRoute: Homescreen.routeName,
-      routes: {
-        Homescreen.routeName: (context) => const Homescreen(),
-        LoginFormScreen.routeName: (context) => const LoginFormScreen(),
-        SignUpScreen.routeName: (context) => const SignUpScreen(),
-      },
     );
   }
 }
