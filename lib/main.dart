@@ -14,6 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: router,
       theme: ThemeData(
+        //앱바 테마
+        appBarTheme:
+            const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
+
+        //텍스트 테마
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             fontSize: Sizes.size56,
