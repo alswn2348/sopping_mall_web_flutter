@@ -1,16 +1,16 @@
-import 'dart:convert';
-
 import 'package:e_commerce_flutter/constants/gaps.dart';
-import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
-import 'package:e_commerce_flutter/features/home_screen.dart';
+import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'widgets/form_button.dart';
-import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
-  static const String routeName = "/sign_up";
+  static const String routeName = "sign_up";
+  static const String routeURL = "/sign_up";
   const SignUpScreen({super.key});
 
   @override
@@ -20,28 +20,79 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  void saveInfo() async {}
+
   Map<String, String> formData = {};
 
   void _onSubmitTap() async {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-
-        var response = await http.post(
-          Uri.parse("http://121.172.36.156:8080/register"),
-          body: jsonEncode(formData),
-          headers: {"content-type": "application/json"},
-        );
-        if (response.statusCode == 200) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const Homescreen()),
-              (Route<dynamic> route) => false);
-        } else {
-          setState(() {});
-        }
+        _signUp();
       }
     }
+  }
+
+  _signUp() async {
+    var response =
+        await context.read<AuthenticartionViewModel>().register(formData);
+    if (response.statusCode == 200) {
+      if (!mounted) return;
+      completeDialog();
+    } else {
+      errorDialog();
+    }
+  }
+
+  Future<dynamic> errorDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          padding: const EdgeInsets.all(Sizes.size60),
+          child: const Text("회원가입에 실패하였습니다."),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> completeDialog() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          padding: const EdgeInsets.all(Sizes.size60),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '회원가입이 완료되었습니다.',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              Gaps.v20,
+              GestureDetector(
+                onTap: () {
+                  context.pushNamed(LoginScreen.routeName);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(Sizes.size10),
+                  decoration: const BoxDecoration(color: Colors.blueAccent),
+                  child: Text(
+                    "로그인 페이지로 이동",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize:
+                          Theme.of(context).textTheme.headlineMedium?.fontSize,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -135,7 +186,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Gaps.v16,
                     TextFormField(
-                      obscureText: true,
                       validator: (value) {
                         if (value != null && value.isEmpty) {
                           return "Plase write your phone";
@@ -160,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       onSaved: (newValue) {
                         if (newValue != null) {
-                          formData['adress'] = newValue;
+                          formData['address'] = newValue;
                         }
                       },
                       decoration: const InputDecoration(hintText: 'adress'),
@@ -183,6 +233,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onLoginTap() {
-    context.pop(LoginFormScreen.routeName);
+    context.pop(LoginScreen.routeName);
   }
 }
