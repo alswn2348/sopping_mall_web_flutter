@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() async {
     await context.read<AuthenticartionViewModel>().login(formData);
     if (!mounted) return;
-    context.pushReplacement('/');
+    context.go("/home");
   }
 
   @override
@@ -129,6 +129,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onSignUpTap() {
-    context.push(SignUpScreen.routeName);
+    context.pushNamed(SignUpScreen.routeName);
   }
 }

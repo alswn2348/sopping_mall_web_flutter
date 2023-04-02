@@ -1,5 +1,5 @@
 class Token {
-  late final String value;
+  late String value = "";
 
   Token({required this.value});
 

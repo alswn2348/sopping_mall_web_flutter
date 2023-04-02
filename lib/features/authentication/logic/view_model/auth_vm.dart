@@ -11,7 +11,9 @@ class AuthenticartionViewModel extends ChangeNotifier {
   AuthenticartionViewModel(this._repository);
 
   Future<void> login(Map<String, String> data) async {
-    await _repository.login(data);
+    var token = await _repository.login(data);
+
+    _token.value = token.value;
     notifyListeners();
   }
 
@@ -21,6 +23,7 @@ class AuthenticartionViewModel extends ChangeNotifier {
 
   Future<void> logout() async {
     await _repository.logout();
+    _token.value = "";
     notifyListeners();
   }
 

@@ -7,15 +7,20 @@ class ApiService {
   static const String baseUri = "http://121.172.36.156:8080";
 
   Future<Token> login(Map<String, String> data) async {
-    final response = await http.post(
-      Uri.parse("$baseUri/login"),
-      body: jsonEncode(data),
-      headers: {"content-type": "application/json"},
-    );
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUri/login"),
+        body: jsonEncode(data),
+        headers: {"content-type": "application/json"},
+      );
 
-    final token = Token.fromJson(jsonDecode(response.body));
+      final token = Token.fromJson(jsonDecode(response.body));
 
-    return token;
+      return token;
+    } catch (e) {
+      print(e);
+    }
+    return Token(value: "value");
   }
 
   Future<http.Response> register(Map<String, String> data) async {

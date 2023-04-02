@@ -10,19 +10,25 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  static const String routeName = '/';
-  const MainNavigationScreen({
-    super.key,
-  });
+  static const String routeName = 'mainNavigation';
+
+  final String tab;
+  const MainNavigationScreen({super.key, required this.tab});
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 0;
+  final List<String> _tabs = [
+    "home",
+    "shop",
+  ];
+
+  late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   void _onTap(int index) {
+    context.go("/${_tabs[index]}");
     setState(() {
       _selectedIndex = index;
     });
@@ -145,5 +151,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   void _onLogoutTap() {
     context.read<AuthenticartionViewModel>().logout();
+    _onTap(0);
   }
 }
