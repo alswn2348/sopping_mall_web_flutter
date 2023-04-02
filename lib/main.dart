@@ -1,9 +1,26 @@
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/repository/auth_repository.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+
 import 'package:e_commerce_flutter/router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  final preferences = await SharedPreferences.getInstance();
+  final repository = AuthRepository(preferences);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthenticartionViewModel(repository),
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

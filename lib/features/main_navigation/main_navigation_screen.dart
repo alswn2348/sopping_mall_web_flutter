@@ -1,11 +1,13 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/authentication/login_form_screen.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
 import 'package:e_commerce_flutter/features/shop/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = '/';
@@ -24,6 +26,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -73,14 +80,25 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     Row(
                       children: [
                         GestureDetector(
-                            onTap: _onLoginTap,
-                            child: const Text(
-                              'login',
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: Sizes.size12,
-                              ),
-                            )),
+                          onTap: context
+                                      .watch<AuthenticartionViewModel>()
+                                      .updateToken !=
+                                  ""
+                              ? _onLogoutTap
+                              : _onLoginTap,
+                          child: Text(
+                            context
+                                        .watch<AuthenticartionViewModel>()
+                                        .updateToken !=
+                                    ""
+                                ? 'logout'
+                                : 'login',
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: Sizes.size12,
+                            ),
+                          ),
+                        ),
                         Gaps.h32,
                         const Icon(
                           Icons.shop,
@@ -122,6 +140,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   void _onLoginTap() {
-    context.push(LoginFormScreen.routeName);
+    context.pushNamed(LoginScreen.routeName);
+  }
+
+  void _onLogoutTap() {
+    context.read<AuthenticartionViewModel>().logout();
   }
 }

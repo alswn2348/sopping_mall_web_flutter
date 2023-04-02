@@ -1,23 +1,21 @@
-import 'dart:convert';
-
 import 'package:e_commerce_flutter/constants/gaps.dart';
-import 'package:e_commerce_flutter/features/authentication/sign_up_screen.dart';
-import 'package:e_commerce_flutter/features/home_screen.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+import 'package:e_commerce_flutter/features/authentication/views/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:provider/provider.dart';
 import 'widgets/form_button.dart';
-import 'package:http/http.dart' as http;
 
-class LoginFormScreen extends StatefulWidget {
-  static const String routeName = "/login_form";
-  const LoginFormScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  static const String routeName = "login";
+  static const String routeURL = "/login";
+  const LoginScreen({super.key});
 
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Map<String, String> formData = {};
@@ -26,22 +24,15 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-
-        var response = await http.post(
-          Uri.parse("http://121.172.36.156:8080/login"),
-          body: jsonEncode(formData),
-          headers: {"content-type": "application/json"},
-        );
-        if (response.statusCode == 200) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const Homescreen()),
-              (Route<dynamic> route) => false);
-        } else {
-          setState(() {});
-        }
+        _login();
       }
     }
+  }
+
+  void _login() async {
+    await context.read<AuthenticartionViewModel>().login(formData);
+    if (!mounted) return;
+    context.pushReplacement('/');
   }
 
   @override
