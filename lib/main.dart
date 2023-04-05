@@ -1,6 +1,7 @@
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/repository/auth_repository.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 
 import 'package:e_commerce_flutter/router.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthenticartionViewModel(repository),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductPostViewModel(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -53,6 +57,12 @@ class MyApp extends StatelessWidget {
           ),
           headlineSmall: TextStyle(
             fontSize: Sizes.size12,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: Sizes.size28,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: Sizes.size16,
           ),
         ),
       ),

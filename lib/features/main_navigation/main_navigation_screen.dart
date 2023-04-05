@@ -4,7 +4,7 @@ import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
-import 'package:e_commerce_flutter/features/shop/shop_screen.dart';
+import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

@@ -1,7 +1,7 @@
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/authentication/views/sign_up_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/main_navigation_screen.dart';
-import 'package:e_commerce_flutter/features/shop/shop_screen.dart';
+import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
