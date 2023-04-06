@@ -119,12 +119,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
         body: Stack(
           children: [
-            Offstage(
-              offstage: _selectedIndex != 0,
+            AnimatedOpacity(
+              opacity: _selectedIndex != 0 ? 0 : 1,
+              duration: const Duration(milliseconds: 500),
               child: const Homescreen(),
             ),
-            Offstage(
-              offstage: _selectedIndex != 1,
+            AnimatedOpacity(
+              opacity: _selectedIndex != 1 ? 0 : 1,
+              duration: const Duration(milliseconds: 500),
               child: const ShopScreen(),
             ),
             Offstage(
