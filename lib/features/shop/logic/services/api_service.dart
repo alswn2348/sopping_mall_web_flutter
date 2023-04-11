@@ -4,7 +4,7 @@ import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUri = "http://121.172.36.156:8080";
+  static const String baseUri = "http://121.172.37.25:8080";
 
   Future<List<Product>> getItems() async {
     final List<Product> product = [];

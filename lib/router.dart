@@ -4,8 +4,10 @@ import 'package:e_commerce_flutter/features/main_navigation/main_navigation_scre
 import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/admin/view/admin_screen.dart';
+
 final router = GoRouter(
-  initialLocation: "/home",
+  initialLocation: "/admin",
   routes: [
     GoRoute(
       path: "/:tab(home|shop)",
@@ -31,6 +33,11 @@ final router = GoRouter(
       path: ShopScreen.routeURL,
       name: ShopScreen.routeName,
       builder: (context, state) => const ShopScreen(),
+    ),
+    GoRoute(
+      path: AdminScreen.routeURL,
+      name: AdminScreen.routeName,
+      builder: (context, state) => const AdminScreen(),
     ),
   ],
 );
