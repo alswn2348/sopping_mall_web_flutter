@@ -48,7 +48,10 @@ class _ProductListState extends State<ProductList> {
             children: const [
               Text(
                 "Product List",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  fontSize: Sizes.size18,
+                  color: Colors.white,
+                ),
               ),
               AddButton(),
             ],
@@ -66,7 +69,7 @@ class _ProductListState extends State<ProductList> {
                 ),
                 DataColumn(
                   label: Text(
-                    "Date",
+                    "Price",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -85,6 +88,7 @@ class _ProductListState extends State<ProductList> {
 
 DataRow recentFileDataRow(Product product) {
   return DataRow(
+    onLongPress: () {},
     cells: [
       DataCell(
         Text(
