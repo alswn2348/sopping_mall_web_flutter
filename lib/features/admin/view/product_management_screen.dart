@@ -18,19 +18,4 @@ class ProductManagementScreen extends StatelessWidget {
       ),
     );
   }
-
-  Container addButton() {
-    return Container(
-      color: AdminColor.primary,
-      child: ElevatedButton.icon(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size18, vertical: Sizes.size12),
-        ),
-        onPressed: () {},
-        icon: const Icon(Icons.add),
-        label: const Text("Add New"),
-      ),
-    );
-  }
 }

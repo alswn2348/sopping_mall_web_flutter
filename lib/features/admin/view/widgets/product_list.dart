@@ -17,10 +17,6 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
-  List<Product> products = [
-    Product(imgPath: "imgPath", name: "name", price: 500)
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -28,8 +24,7 @@ class _ProductListState extends State<ProductList> {
   }
 
   void initProducts() async {
-    products = await context.read<ProductPostViewModel>().updateItem();
-    setState(() {});
+    await context.read<ProductPostViewModel>().updateItem();
   }
 
   @override
@@ -56,27 +51,31 @@ class _ProductListState extends State<ProductList> {
               AddButton(),
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 800,
-            child: DataTable2(
-              columns: const [
-                DataColumn(
-                  label: Text(
-                    "Product Name",
-                    style: TextStyle(color: Colors.white),
+          AnimatedBuilder(
+            animation: context.watch<ProductPostViewModel>(),
+            builder: (context, child) => SizedBox(
+              width: double.infinity,
+              height: 800,
+              child: DataTable2(
+                columns: const [
+                  DataColumn(
+                    label: Text(
+                      "Product Name",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-                DataColumn(
-                  label: Text(
-                    "Price",
-                    style: TextStyle(color: Colors.white),
+                  DataColumn(
+                    label: Text(
+                      "Price",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
+                ],
+                rows: List.generate(
+                  context.read<ProductPostViewModel>().list.length,
+                  (index) => productDataRow(
+                      context.read<ProductPostViewModel>().list[index]),
                 ),
-              ],
-              rows: List.generate(
-                products.length,
-                (index) => recentFileDataRow(products[index]),
               ),
             ),
           ),
@@ -86,7 +85,7 @@ class _ProductListState extends State<ProductList> {
   }
 }
 
-DataRow recentFileDataRow(Product product) {
+DataRow productDataRow(Product product) {
   return DataRow(
     onLongPress: () {},
     cells: [
