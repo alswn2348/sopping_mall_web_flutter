@@ -4,6 +4,7 @@ import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
+import 'package:e_commerce_flutter/features/shop/views/detail_item_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<String> _tabs = [
     "home",
     "shop",
+    "product-page",
   ];
 
   late int _selectedIndex = _tabs.indexOf(widget.tab);
@@ -99,10 +101,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                                     ""
                                 ? 'logout'
                                 : 'login',
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: Sizes.size12,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ),
                         Gaps.h32,
@@ -131,7 +130,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
             Offstage(
               offstage: _selectedIndex != 2,
-              child: const ShopScreen(),
+              child: const DetailItemScreen(),
             ),
             Offstage(
               offstage: _selectedIndex != 3,

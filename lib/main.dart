@@ -45,6 +45,11 @@ class MyApp extends StatelessWidget {
             fontSize: Sizes.size56,
             color: Colors.black,
           ),
+          displaySmall: TextStyle(
+            fontSize: Sizes.size24,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
           headlineLarge: TextStyle(
             fontSize: Sizes.size32,
             fontWeight: FontWeight.bold,
@@ -63,6 +68,14 @@ class MyApp extends StatelessWidget {
           ),
           bodyMedium: TextStyle(
             fontSize: Sizes.size16,
+          ),
+          bodySmall: TextStyle(
+            fontSize: Sizes.size10,
+            color: Colors.black,
+          ),
+          titleSmall: TextStyle(
+            color: Colors.black54,
+            fontSize: Sizes.size12,
           ),
         ),
       ),

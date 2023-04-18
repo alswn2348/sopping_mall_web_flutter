@@ -19,7 +19,7 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   void initState() {
     super.initState();
-    //initProducts();
+    initProducts();
   }
 
   void initProducts() async {
@@ -51,33 +51,36 @@ class _ShopScreenState extends State<ShopScreen> {
                     crossAxisCount: 4,
                     childAspectRatio: 1 / 1.1,
                   ),
-                  itemBuilder: (context, index) => Column(
-                    children: [
-                      Image.network(
-                        "https://source.unsplash.com/random/200x${355 + index}",
-                        width: 200,
-                        height: 200,
-                      ),
-                      Gaps.v10,
-                      Text(
-                        products[index].name,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      Gaps.v10,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            products[index].price.toString(),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          Text(
-                            " ₩",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          )
-                        ],
-                      )
-                    ],
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => _onItemTap(),
+                    child: Column(
+                      children: [
+                        Image.network(
+                          "https://source.unsplash.com/random/200x${355 + index}",
+                          width: 200,
+                          height: 200,
+                        ),
+                        Gaps.v10,
+                        Text(
+                          products[index].name,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Gaps.v10,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              products[index].price.toString(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            Text(
+                              " ₩",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -87,6 +90,8 @@ class _ShopScreenState extends State<ShopScreen> {
       ),
     );
   }
+
+  void _onItemTap() {}
 
   Widget menuBar(BuildContext context) {
     return Column(
