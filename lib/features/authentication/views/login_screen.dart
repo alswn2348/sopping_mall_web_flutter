@@ -1,4 +1,5 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
+import 'package:e_commerce_flutter/features/admin/view/admin_screen.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/authentication/views/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() async {
     await context.read<AuthenticartionViewModel>().login(formData);
-    if (!mounted) return;
-    context.go("/home");
+
+    await isAdmin();
   }
 
   @override
@@ -130,5 +131,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSignUpTap() {
     context.pushNamed(SignUpScreen.routeName);
+  }
+
+  Future<void> isAdmin() async {
+    var role = context.read<AuthenticartionViewModel>().getRole!;
+    if (role.first.toString().contains("ADMIN")) {
+      context.goNamed(AdminScreen.routeName);
+    } else {
+      context.go("/home");
+    }
   }
 }

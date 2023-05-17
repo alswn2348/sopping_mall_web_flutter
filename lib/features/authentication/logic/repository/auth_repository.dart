@@ -1,4 +1,4 @@
-import 'package:e_commerce_flutter/features/authentication/logic/models/token.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,10 +9,10 @@ class AuthRepository {
 
   AuthRepository(this._preferences);
 
-  Future<Token> login(Map<String, String> data) async {
-    var token = await api.login(data);
-    setToken(token);
-    return token;
+  Future<User> login(Map<String, String> data) async {
+    var user = await api.login(data);
+    setToken(user);
+    return user;
   }
 
   Future<Response> register(Map<String, String> data) async {
@@ -23,8 +23,8 @@ class AuthRepository {
     await deleteToken();
   }
 
-  Future<void> setToken(Token token) async {
-    _preferences.setString("token", token.value);
+  Future<void> setToken(User token) async {
+    _preferences.setString("token", token.token);
   }
 
   String getToken() {
