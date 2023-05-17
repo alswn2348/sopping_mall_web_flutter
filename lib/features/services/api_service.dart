@@ -1,22 +1,23 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:e_commerce_flutter/features/authentication/logic/models/token.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUri = "http://121.172.37.25:8080";
 
-  Future<Token> login(Map<String, String> data) async {
+  Future<User> login(Map<String, String> data) async {
     final response = await http.post(
       Uri.parse("$baseUri/login"),
       body: jsonEncode(data),
       headers: {"content-type": "application/json"},
     );
 
-    final token = Token.fromJson(jsonDecode(response.body));
+    final user = User.formJson(jsonDecode(response.body));
 
-    return token;
+    return user;
   }
 
   Future<http.Response> register(Map<String, String> data) async {
@@ -48,5 +49,14 @@ class ApiService {
       headers: {"content-type": "application/json"},
     );
     return response;
+  }
+
+  Future<void> deleteItem(int id, String token) async {
+    await http.delete(
+      Uri.parse("$baseUri/admin/$id"),
+      headers: {
+        HttpHeaders.authorizationHeader: token,
+      },
+    );
   }
 }

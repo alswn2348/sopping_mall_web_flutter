@@ -21,4 +21,10 @@ class ProductPostViewModel extends ChangeNotifier {
     await api.addItem(data.toJson());
     notifyListeners();
   }
+
+  Future<void> deleteItem(int index, int id, String token) async {
+    _products.removeAt(index);
+    await api.deleteItem(id, token);
+    notifyListeners();
+  }
 }

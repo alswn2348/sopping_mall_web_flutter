@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:e_commerce_flutter/constants/color.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/admin/view/widgets/add_button.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,13 @@ class _ProductListState extends State<ProductList> {
                 columns: const [
                   DataColumn(
                     label: Text(
-                      "Product Name",
+                      "Id",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Name",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -70,10 +77,16 @@ class _ProductListState extends State<ProductList> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "수정 & 삭제",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
                 rows: List.generate(
                   context.read<ProductPostViewModel>().list.length,
-                  (index) => productDataRow(
+                  (index) => productDataRow(context, index,
                       context.read<ProductPostViewModel>().list[index]),
                 ),
               ),
@@ -85,10 +98,16 @@ class _ProductListState extends State<ProductList> {
   }
 }
 
-DataRow productDataRow(Product product) {
+DataRow productDataRow(BuildContext context, int index, Product product) {
   return DataRow(
     onLongPress: () {},
     cells: [
+      DataCell(
+        Text(
+          product.id.toString(),
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
       DataCell(
         Text(
           product.name,
@@ -101,6 +120,31 @@ DataRow productDataRow(Product product) {
           style: const TextStyle(color: Colors.white),
         ),
       ),
+      DataCell(
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.edit_note,
+                color: Colors.white,
+              ),
+            ),
+            IconButton(
+              onPressed: () => onDeleteTap(context, index, product.id!),
+              icon: const Icon(
+                Icons.delete_forever,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     ],
   );
+}
+
+onDeleteTap(BuildContext context, int index, int id) {
+  var token = context.read<AuthenticartionViewModel>().updateToken;
+  context.read<ProductPostViewModel>().deleteItem(index, id, token);
 }
