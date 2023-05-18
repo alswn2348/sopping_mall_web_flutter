@@ -1,14 +1,47 @@
 import 'package:e_commerce_flutter/constants/color.dart';
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:provider/provider.dart';
+import 'dart:html' as html;
 
-class AddButton extends StatelessWidget {
-  const AddButton({super.key});
+enum ButtonType { add, modify }
+
+class EditButton extends StatefulWidget {
+  final ButtonType buttonType;
+  final int? index;
+  final Product? product;
+
+  const EditButton({
+    super.key,
+    required this.buttonType,
+    this.index,
+    this.product,
+  });
+
+  @override
+  State<EditButton> createState() => _EditButtonState();
+}
+
+class _EditButtonState extends State<EditButton> {
+  final TextEditingController _imgPathTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _imgPathTextController.value = TextEditingValue.empty;
+  }
+
+  @override
+  void dispose() {
+    _imgPathTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +53,49 @@ class AddButton extends StatelessWidget {
               horizontal: Sizes.size18, vertical: Sizes.size12),
         ),
         onPressed: () => _onPressedAdd(context),
-        icon: const Icon(Icons.add),
-        label: const Text("Add New"),
+        icon: widget.buttonType == ButtonType.add
+            ? const Icon(Icons.add)
+            : const Icon(Icons.edit),
+        label: widget.buttonType == ButtonType.add
+            ? const Text("Add New")
+            : const Text('modify'),
       ),
     );
   }
 
   void _onPressedAdd(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final String token = context.read<AuthenticartionViewModel>().updateToken;
+
     Product formData = Product(
       imgPath: "",
       name: "",
       price: 0,
     );
+    if (widget.buttonType == ButtonType.modify) {
+      formData = widget.product!;
+      _imgPathTextController.value = TextEditingValue(text: formData.imgPath);
+    }
+
+    void addProduct() {
+      context.read<ProductPostViewModel>().addItem(formData, token);
+    }
+
+    void modifyProduct(int index, Product product) {
+      context.read<ProductPostViewModel>().modifyItem(
+            index: index,
+            token: token,
+            data: product,
+          );
+    }
 
     void onCheckTap() {
-      void addProduct() {
-        context.read<ProductPostViewModel>().addItem(formData);
-      }
-
       if (formKey.currentState != null) {
         if (formKey.currentState!.validate()) {
           formKey.currentState!.save();
-          addProduct();
+          widget.buttonType == ButtonType.add
+              ? addProduct()
+              : modifyProduct(widget.index!, formData);
           Navigator.of(context).pop();
         }
       }
@@ -63,6 +116,7 @@ class AddButton extends StatelessWidget {
                 children: [
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
+                    initialValue: formData.name,
                     validator: (value) {
                       if (value != null && value.isEmpty) {
                         return "Plase write your name";
@@ -84,6 +138,7 @@ class AddButton extends StatelessWidget {
                     children: [
                       Flexible(
                         child: TextFormField(
+                          controller: _imgPathTextController,
                           style: const TextStyle(color: Colors.white),
                           validator: (value) {
                             if (value != null && value.isEmpty) {
@@ -103,16 +158,18 @@ class AddButton extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.image,
-                            color: Colors.white,
-                          ))
+                        onPressed: () => _onImageTap(),
+                        icon: const Icon(
+                          Icons.image,
+                          color: Colors.white,
+                        ),
+                      )
                     ],
                   ),
                   Gaps.v16,
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
+                    initialValue: formData.price.toString(),
                     validator: (value) {
                       if (value != null && !isDigit(value)) {
                         return "Plase write your price";
@@ -132,6 +189,7 @@ class AddButton extends StatelessWidget {
                   Gaps.v16,
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
+                    initialValue: formData.content,
                     validator: (value) {
                       if (value != null && value.isEmpty) {
                         return "Plase write your content";
@@ -155,7 +213,9 @@ class AddButton extends StatelessWidget {
                           horizontal: Sizes.size28, vertical: Sizes.size20),
                     ),
                     onPressed: () => onCheckTap(),
-                    child: const Text("추가"),
+                    child: widget.buttonType == ButtonType.add
+                        ? const Text("추가")
+                        : const Text("수정"),
                   ),
                 ],
               ),
@@ -164,5 +224,12 @@ class AddButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _onImageTap() async {
+    html.File? imageFile = await ImagePickerWeb.getImageAsFile();
+    if (imageFile != null) {
+      print(imageFile.name + imageFile.relativePath! + imageFile.toString());
+    }
   }
 }

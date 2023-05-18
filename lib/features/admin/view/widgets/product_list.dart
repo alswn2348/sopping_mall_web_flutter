@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:e_commerce_flutter/constants/color.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/admin/view/widgets/add_button.dart';
+import 'package:e_commerce_flutter/features/admin/view/widgets/edit_button.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
@@ -49,7 +49,9 @@ class _ProductListState extends State<ProductList> {
                   color: Colors.white,
                 ),
               ),
-              AddButton(),
+              EditButton(
+                buttonType: ButtonType.add,
+              ),
             ],
           ),
           AnimatedBuilder(
@@ -123,12 +125,10 @@ DataRow productDataRow(BuildContext context, int index, Product product) {
       DataCell(
         Row(
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit_note,
-                color: Colors.white,
-              ),
+            EditButton(
+              buttonType: ButtonType.modify,
+              index: index,
+              product: product,
             ),
             IconButton(
               onPressed: () => onDeleteTap(context, index, product.id!),
@@ -146,5 +146,9 @@ DataRow productDataRow(BuildContext context, int index, Product product) {
 
 onDeleteTap(BuildContext context, int index, int id) {
   var token = context.read<AuthenticartionViewModel>().updateToken;
-  context.read<ProductPostViewModel>().deleteItem(index, id, token);
+  context.read<ProductPostViewModel>().deleteItem(
+        index: index,
+        id: id,
+        token: token,
+      );
 }

@@ -1,6 +1,6 @@
 class Product {
   int? id;
-  String imgPath = "";
+  String imgPath = " ";
   String name = "";
   int price = 0;
   String? content = "";

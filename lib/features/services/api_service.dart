@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
@@ -42,12 +41,16 @@ class ApiService {
     return product;
   }
 
-  Future<http.Response> addItem(Map<String, String> data) async {
+  Future<http.Response> addItem(Map<String, String> data, String token) async {
     final response = await http.post(
-      Uri.parse("$baseUri/additem"),
+      Uri.parse("$baseUri/admin/additem"),
       body: jsonEncode(data),
-      headers: {"content-type": "application/json"},
+      headers: {
+        "authorization": "Bearer $token",
+        "content-type": "application/json",
+      },
     );
+
     return response;
   }
 
@@ -55,7 +58,18 @@ class ApiService {
     await http.delete(
       Uri.parse("$baseUri/admin/$id"),
       headers: {
-        HttpHeaders.authorizationHeader: token,
+        "authorization": "Bearer $token",
+      },
+    );
+  }
+
+  Future<void> putItem(Product data, String token) async {
+    await http.put(
+      Uri.parse("$baseUri/admin/${data.id}"),
+      body: jsonEncode(data.toJson()),
+      headers: {
+        "authorization": "Bearer $token",
+        "content-type": "application/json",
       },
     );
   }

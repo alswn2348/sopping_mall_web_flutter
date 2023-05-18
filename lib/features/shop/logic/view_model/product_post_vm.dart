@@ -16,15 +16,29 @@ class ProductPostViewModel extends ChangeNotifier {
     return _products;
   }
 
-  Future<void> addItem(Product data) async {
+  Future<void> addItem(Product data, String token) async {
     _products.add(data);
-    await api.addItem(data.toJson());
+    await api.addItem(data.toJson(), token);
     notifyListeners();
   }
 
-  Future<void> deleteItem(int index, int id, String token) async {
+  Future<void> deleteItem({
+    required int index,
+    required int id,
+    required String token,
+  }) async {
     _products.removeAt(index);
     await api.deleteItem(id, token);
+    notifyListeners();
+  }
+
+  void modifyItem({
+    required int index,
+    required Product data,
+    required String token,
+  }) async {
+    _products[index] = data;
+    await api.putItem(data, token);
     notifyListeners();
   }
 }
