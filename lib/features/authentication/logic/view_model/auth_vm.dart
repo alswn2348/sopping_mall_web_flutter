@@ -1,7 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class AuthenticartionViewModel extends ChangeNotifier {
   final AuthRepository _repository;

@@ -1,76 +1,105 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class ApiService {
+  static var dio = Dio();
   static const String baseUri = "http://121.172.37.25:8080";
 
   Future<User> login(Map<String, String> data) async {
-    final response = await http.post(
-      Uri.parse("$baseUri/login"),
-      body: jsonEncode(data),
-      headers: {"content-type": "application/json"},
-    );
-
-    final user = User.formJson(jsonDecode(response.body));
-
-    return user;
+    try {
+      final response = await dio.post(
+        "$baseUri/login",
+        data: jsonEncode(data),
+        options: Options(
+          contentType: "application/json",
+        ),
+      );
+      final user = User.formJson(
+        response.data,
+      );
+      return user;
+    } catch (e) {
+      Exception(e);
+    }
+    return Future.value(User(token: ""));
   }
 
-  Future<http.Response> register(Map<String, String> data) async {
-    final response = await http.post(
-      Uri.parse("$baseUri/register"),
-      body: jsonEncode(data),
-      headers: {"content-type": "application/json"},
+  Future<Response<dynamic>> register(Map<String, String> data) async {
+    final response = await dio.post(
+      "$baseUri/register",
+      data: jsonEncode(data),
+      options: Options(
+        contentType: "application/json",
+      ),
     );
+
     return response;
   }
 
   Future<List<Product>> getItems() async {
     final List<Product> product = [];
-    final response = await http.get(
-      Uri.parse("$baseUri/items"),
-      headers: {"content-type": "application/json"},
+    final response = await dio.get(
+      "$baseUri/items",
+      options: Options(
+        headers: {"content-type": "application/json"},
+      ),
     );
 
-    for (var item in jsonDecode(utf8.decode(response.bodyBytes))) {
+    for (var item in response.data) {
       product.add(Product.fromJson(item));
     }
     return product;
   }
 
-  Future<http.Response> addItem(Map<String, String> data, String token) async {
-    final response = await http.post(
-      Uri.parse("$baseUri/admin/additem"),
-      body: jsonEncode(data),
-      headers: {
+  Future<Response<dynamic>> addItem(
+      Map<String, String> data, String token) async {
+    final response = await dio.post(
+      "$baseUri/admin/additem",
+      data: jsonEncode(data),
+      options: Options(headers: {
         "authorization": "Bearer $token",
-        "content-type": "application/json",
-      },
+      }, contentType: "application/json"),
     );
 
     return response;
   }
 
   Future<void> deleteItem(int id, String token) async {
-    await http.delete(
-      Uri.parse("$baseUri/admin/$id"),
-      headers: {
-        "authorization": "Bearer $token",
-      },
+    await dio.delete(
+      "$baseUri/admin/$id",
+      options: Options(
+        headers: {
+          "authorization": "Bearer $token",
+        },
+      ),
     );
   }
 
   Future<void> putItem(Product data, String token) async {
-    await http.put(
-      Uri.parse("$baseUri/admin/${data.id}"),
-      body: jsonEncode(data.toJson()),
-      headers: {
+    await dio.put(
+      "$baseUri/admin/${data.id}",
+      data: jsonEncode(
+        data.toJson(),
+      ),
+      options: Options(headers: {
         "authorization": "Bearer $token",
-        "content-type": "application/json",
-      },
+      }, contentType: "application/json"),
     );
+  }
+
+  Future<String> uploadFile(List<int> file, String fileName) async {
+    FormData formData = FormData.fromMap({
+      "image": MultipartFile.fromBytes(
+        file,
+        filename: fileName,
+        contentType: MediaType("image", "png"),
+      )
+    });
+    var response = await dio.post("$baseUri/fileSystem", data: formData);
+    return response.data['FileId'];
   }
 }
