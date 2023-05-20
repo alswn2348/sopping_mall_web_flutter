@@ -7,7 +7,7 @@ import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   static var dio = Dio();
-  static const String baseUri = "http://121.172.37.25:8080";
+  static const String baseUri = "http://localhost:8080";
 
   Future<User> login(Map<String, String> data) async {
     try {

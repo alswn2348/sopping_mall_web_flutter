@@ -2,6 +2,7 @@ import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
+import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +60,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           width: 200,
                           height: 200,
                           child: Image.network(
-                            "http://121.172.37.25:8080/${products[index].imgPath}",
+                            "${ApiService.baseUri}/${products[index].imgPath}",
                             fit: BoxFit.fill,
                           ),
                         ),
