@@ -41,4 +41,8 @@ class ProductPostViewModel extends ChangeNotifier {
     await api.putItem(data, token);
     notifyListeners();
   }
+
+  Future<void> updateImage(List<int> file, String name, String token) async {
+    await api.uploadFile(file, name, token);
+  }
 }

@@ -8,7 +8,6 @@ import 'package:e_commerce_flutter/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:provider/provider.dart';
-import 'dart:html' as html;
 
 enum ButtonType { add, modify }
 
@@ -67,11 +66,7 @@ class _EditButtonState extends State<EditButton> {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final String token = context.read<AuthenticartionViewModel>().updateToken;
 
-    Product formData = Product(
-      imgPath: "",
-      name: "",
-      price: 0,
-    );
+    Product formData = Product(imgPath: "", name: "", content: "a");
     if (widget.buttonType == ButtonType.modify) {
       formData = widget.product!;
       _imgPathTextController.value = TextEditingValue(text: formData.imgPath);
@@ -87,6 +82,19 @@ class _EditButtonState extends State<EditButton> {
             token: token,
             data: product,
           );
+    }
+
+    void onimageTap() async {
+      var mediaData = await ImagePickerWeb.getImageInfo;
+      if (mediaData != null && mounted) {
+        dynamic fileBytes = mediaData.data;
+        context
+            .read<ProductPostViewModel>()
+            .updateImage(fileBytes, mediaData.fileName!, token);
+
+        _imgPathTextController.value =
+            TextEditingValue(text: "img/${mediaData.fileName!}");
+      }
     }
 
     void onCheckTap() {
@@ -158,7 +166,7 @@ class _EditButtonState extends State<EditButton> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => _onImageTap(),
+                        onPressed: onimageTap,
                         icon: const Icon(
                           Icons.image,
                           color: Colors.white,
@@ -169,7 +177,9 @@ class _EditButtonState extends State<EditButton> {
                   Gaps.v16,
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
-                    initialValue: formData.price.toString(),
+                    initialValue: widget.buttonType == ButtonType.modify
+                        ? formData.price.toString()
+                        : "",
                     validator: (value) {
                       if (value != null && !isDigit(value)) {
                         return "Plase write your price";
@@ -224,12 +234,5 @@ class _EditButtonState extends State<EditButton> {
         ),
       ),
     );
-  }
-
-  Future<void> _onImageTap() async {
-    html.File? imageFile = await ImagePickerWeb.getImageAsFile();
-    if (imageFile != null) {
-      print(imageFile.name + imageFile.relativePath! + imageFile.toString());
-    }
   }
 }

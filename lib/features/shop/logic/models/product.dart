@@ -1,15 +1,15 @@
 class Product {
   int? id;
-  String imgPath = " ";
+  String imgPath = "";
   String name = "";
-  int price = 0;
+  int? price;
   String? content = "";
 
   Product({
     this.id,
     required this.imgPath,
     required this.name,
-    required this.price,
+    this.price,
     this.content,
   });
 
@@ -18,6 +18,7 @@ class Product {
     imgPath = json['imgPath'];
     name = json['name'];
     price = json['price'];
+    content = json['content'];
   }
 
   Map<String, String> toJson() {

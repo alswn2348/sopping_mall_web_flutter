@@ -55,10 +55,13 @@ class _ShopScreenState extends State<ShopScreen> {
                     onTap: () => _onItemTap(),
                     child: Column(
                       children: [
-                        Image.network(
-                          "https://source.unsplash.com/random/200x${355 + index}",
+                        SizedBox(
                           width: 200,
                           height: 200,
+                          child: Image.network(
+                            "http://121.172.37.25:8080/${products[index].imgPath}",
+                            fit: BoxFit.fill,
+                          ),
                         ),
                         Gaps.v10,
                         Text(

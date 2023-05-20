@@ -91,15 +91,27 @@ class ApiService {
     );
   }
 
-  Future<String> uploadFile(List<int> file, String fileName) async {
-    FormData formData = FormData.fromMap({
-      "image": MultipartFile.fromBytes(
-        file,
-        filename: fileName,
-        contentType: MediaType("image", "png"),
-      )
-    });
-    var response = await dio.post("$baseUri/fileSystem", data: formData);
-    return response.data['FileId'];
+  Future<String> uploadFile(
+      List<int> file, String fileName, String token) async {
+    FormData formData = FormData.fromMap(
+      {
+        "image": MultipartFile.fromBytes(
+          file,
+          filename: fileName,
+          contentType: MediaType("image", "png"),
+        )
+      },
+    );
+    Response response;
+    try {
+      response = await dio.post("$baseUri/admin/fileSystem",
+          data: formData,
+          options: Options(headers: {"authorization": "Bearer $token"}));
+      print(response.data);
+      return response.data['FileId'];
+    } catch (e) {
+      print(e);
+    }
+    return "";
   }
 }

@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'features/admin/view/admin_screen.dart';
 
 final router = GoRouter(
-  initialLocation: DetailItemScreen.routeURL,
+  initialLocation: "/home",
   routes: [
     GoRoute(
       path: "/:tab(home|shop|product-page)",
