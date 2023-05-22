@@ -7,7 +7,7 @@ import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   static var dio = Dio();
-  static const String baseUri = "http://localhost:8080";
+  static const String baseUri = "http://121.172.37.25:8080";
 
   Future<User> login(Map<String, String> data) async {
     try {
@@ -45,7 +45,7 @@ class ApiService {
     final response = await dio.get(
       "$baseUri/items",
       options: Options(
-        headers: {"content-type": "application/json"},
+        contentType: "application/json",
       ),
     );
 
@@ -91,8 +91,7 @@ class ApiService {
     );
   }
 
-  Future<String> uploadFile(
-      List<int> file, String fileName, String token) async {
+  Future<void> uploadFile(List<int> file, String fileName, String token) async {
     FormData formData = FormData.fromMap(
       {
         "image": MultipartFile.fromBytes(
@@ -102,16 +101,50 @@ class ApiService {
         )
       },
     );
-    Response response;
+
     try {
-      response = await dio.post("$baseUri/admin/fileSystem",
-          data: formData,
-          options: Options(headers: {"authorization": "Bearer $token"}));
-      print(response.data);
-      return response.data['FileId'];
+      await dio.post(
+        "$baseUri/admin/fileSystem",
+        data: formData,
+        options: Options(
+          headers: {"authorization": "Bearer $token"},
+        ),
+      );
     } catch (e) {
-      print(e);
+      Exception(e);
     }
-    return "";
+  }
+
+  Future<void> getCartItem(int count, String token) async {
+    await dio.get(
+      "$baseUri/user/cart/items",
+      options: Options(headers: {
+        "authorization": "Bearer $token",
+      }, contentType: "application/json"),
+    );
+  }
+
+  Future<void> addCartItem(int id, int count, String token) async {
+    await dio.post(
+      "$baseUri/user/cart/items/$id",
+      data: jsonEncode(
+        {"count": "$count"},
+      ),
+      options: Options(headers: {
+        "authorization": "Bearer $token",
+      }, contentType: "application/json"),
+    );
+  }
+
+  Future<void> removeCartItem(int id, int count, String token) async {
+    await dio.delete(
+      "$baseUri/user/cart/items/$id",
+      data: jsonEncode(
+        {"count": "$count"},
+      ),
+      options: Options(headers: {
+        "authorization": "Bearer $token",
+      }, contentType: "application/json"),
+    );
   }
 }
