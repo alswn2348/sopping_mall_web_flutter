@@ -65,8 +65,12 @@ class _EditButtonState extends State<EditButton> {
   void _onPressedAdd(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final String token = context.read<AuthenticartionViewModel>().updateToken;
+    MediaInfo? mediaData;
 
-    Product formData = Product(imgPath: "", name: "", content: "a");
+    Product formData = Product(
+      imgPath: "",
+      name: "",
+    );
     if (widget.buttonType == ButtonType.modify) {
       formData = widget.product!;
       _imgPathTextController.value = TextEditingValue(text: formData.imgPath);
@@ -85,15 +89,10 @@ class _EditButtonState extends State<EditButton> {
     }
 
     void onimageTap() async {
-      var mediaData = await ImagePickerWeb.getImageInfo;
-      if (mediaData != null && mounted) {
-        dynamic fileBytes = mediaData.data;
-        context
-            .read<ProductPostViewModel>()
-            .updateImage(fileBytes, mediaData.fileName!, token);
-
+      mediaData = await ImagePickerWeb.getImageInfo;
+      if (mediaData != null) {
         _imgPathTextController.value =
-            TextEditingValue(text: "img/${mediaData.fileName!}");
+            TextEditingValue(text: "img/${mediaData!.fileName!}");
       }
     }
 
@@ -104,6 +103,12 @@ class _EditButtonState extends State<EditButton> {
           widget.buttonType == ButtonType.add
               ? addProduct()
               : modifyProduct(widget.index!, formData);
+          if (mounted) {
+            dynamic fileBytes = mediaData!.data;
+            context
+                .read<ProductPostViewModel>()
+                .updateImage(fileBytes, mediaData!.fileName!, token);
+          }
           Navigator.of(context).pop();
         }
       }
