@@ -5,10 +5,15 @@ import 'package:e_commerce_flutter/features/shop/views/widgets/size_dropdown_men
 import 'package:flutter/material.dart';
 
 class DetailItemScreen extends StatefulWidget {
-  static const String routeName = 'product-page';
-  static const String routeURL = '/product-page';
+  static const String routeName = 'detail-product-page';
+  static const String routeURL = ':itemId';
 
-  const DetailItemScreen({super.key});
+  final String itemId;
+
+  const DetailItemScreen({
+    super.key,
+    required this.itemId,
+  });
 
   @override
   State<DetailItemScreen> createState() => _DetailItemScreenState();

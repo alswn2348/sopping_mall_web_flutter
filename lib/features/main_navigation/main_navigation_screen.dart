@@ -4,6 +4,7 @@ import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
+import 'package:e_commerce_flutter/features/shop/views/cart_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/detail_item_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     "home",
     "shop",
     "product-page",
+    "cart/:userId",
   ];
 
   late int _selectedIndex = _tabs.indexOf(widget.tab);
@@ -33,6 +35,22 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     context.go("/${_tabs[index]}");
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _onLoginTap() {
+    context.pushNamed(LoginScreen.routeName);
+  }
+
+  void _onLogoutTap() {
+    context.read<AuthenticartionViewModel>().logout();
+    _onTap(0);
+  }
+
+  void _onCartTap() {
+    context.go("/cart");
+    setState(() {
+      _selectedIndex = 3;
     });
   }
 
@@ -105,10 +123,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                           ),
                         ),
                         Gaps.h32,
-                        const Icon(
-                          Icons.shop,
-                          size: Sizes.size24,
-                          color: Colors.black,
+                        GestureDetector(
+                          onTap: () => _onCartTap(),
+                          child: const Icon(
+                            Icons.shop,
+                            size: Sizes.size20,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     )
@@ -128,13 +149,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               duration: const Duration(milliseconds: 500),
               child: const ShopScreen(),
             ),
-            Offstage(
-              offstage: _selectedIndex != 2,
-              child: const DetailItemScreen(),
+            AnimatedOpacity(
+              opacity: _selectedIndex != 2 ? 0 : 1,
+              duration: const Duration(milliseconds: 500),
+              child: const DetailItemScreen(
+                itemId: "",
+              ),
             ),
-            Offstage(
-              offstage: _selectedIndex != 3,
-              child: const ShopScreen(),
+            AnimatedOpacity(
+              opacity: _selectedIndex != 3 ? 0 : 1,
+              duration: const Duration(milliseconds: 500),
+              child: const CartScreen(
+                userId: "",
+              ),
             ),
             Offstage(
               offstage: _selectedIndex != 4,
@@ -144,14 +171,5 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ),
     );
-  }
-
-  void _onLoginTap() {
-    context.pushNamed(LoginScreen.routeName);
-  }
-
-  void _onLogoutTap() {
-    context.read<AuthenticartionViewModel>().logout();
-    _onTap(0);
   }
 }

@@ -1,9 +1,11 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/main_navigation/main_navigation_screen.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -53,7 +55,9 @@ class _ShopScreenState extends State<ShopScreen> {
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => _onItemTap(),
+                    onTap: () => _onItemTap(
+                      products[index].id.toString(),
+                    ),
                     child: Column(
                       children: [
                         SizedBox(
@@ -95,71 +99,86 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  void _onItemTap() {}
+  void _onItemTap(String itemId) {
+    context.goNamed(
+      MainNavigationScreen.routeName,
+      params: {"tab": 'product-page'},
+    );
+  }
 
   Widget menuBar(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "SHOP",
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        Gaps.v20,
-        Container(
-          height: Sizes.size1,
-          width: 230,
-          color: Colors.black26,
-        ),
-        Gaps.v20,
-        SizedBox(
-          width: 230,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Categorie",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Text(
-                "+",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        print("Aa");
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+              onPressed: () {
+                print("vv");
+              },
+              icon: const Icon(Icons.abc)),
+          Text(
+            "SHOP",
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-        ),
-        Gaps.v20,
-        Container(
-          height: Sizes.size1,
-          width: 230,
-          color: Colors.black26,
-        ),
-        Gaps.v20,
-        SizedBox(
-          width: 230,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Prix",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Text(
-                "+",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
+          Gaps.v20,
+          Container(
+            height: Sizes.size1,
+            width: 230,
+            color: Colors.black26,
           ),
-        ),
-        Gaps.v20,
-        Container(
-          height: Sizes.size1,
-          width: 230,
-          color: Colors.black26,
-        ),
-      ],
+          Gaps.v20,
+          SizedBox(
+            width: 230,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Categorie",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  "+",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+          Gaps.v20,
+          Container(
+            height: Sizes.size1,
+            width: 230,
+            color: Colors.black26,
+          ),
+          Gaps.v20,
+          SizedBox(
+            width: 230,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Prix",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  "+",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+          Gaps.v20,
+          Container(
+            height: Sizes.size1,
+            width: 230,
+            color: Colors.black26,
+          ),
+        ],
+      ),
     );
   }
 }

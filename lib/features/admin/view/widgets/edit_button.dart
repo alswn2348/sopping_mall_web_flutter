@@ -103,7 +103,7 @@ class _EditButtonState extends State<EditButton> {
           widget.buttonType == ButtonType.add
               ? addProduct()
               : modifyProduct(widget.index!, formData);
-          if (mounted) {
+          if (mounted && mediaData != null) {
             dynamic fileBytes = mediaData!.data;
             context
                 .read<ProductPostViewModel>()
