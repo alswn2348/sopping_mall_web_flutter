@@ -36,7 +36,6 @@ class ApiService {
         contentType: "application/json",
       ),
     );
-
     return response;
   }
 
@@ -48,10 +47,21 @@ class ApiService {
         contentType: "application/json",
       ),
     );
-
     for (var item in response.data) {
       product.add(Product.fromJson(item));
     }
+    return product;
+  }
+
+  Future<Product> getDetaileItem(String Id) async {
+    final Product product;
+    final response = await dio.get(
+      "$baseUri/item/$Id",
+      options: Options(
+        contentType: "application/json",
+      ),
+    );
+    product = Product.fromJson(response.data);
     return product;
   }
 
