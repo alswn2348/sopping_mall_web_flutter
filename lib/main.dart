@@ -73,6 +73,10 @@ class MyApp extends StatelessWidget {
             fontSize: Sizes.size10,
             color: Colors.black,
           ),
+          titleLarge: TextStyle(
+            color: Colors.black,
+            fontSize: Sizes.size20,
+          ),
           titleSmall: TextStyle(
             color: Colors.black54,
             fontSize: Sizes.size12,
