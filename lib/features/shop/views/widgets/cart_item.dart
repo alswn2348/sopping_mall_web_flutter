@@ -2,6 +2,7 @@ import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/counter_button.dart';
+import 'package:e_commerce_flutter/features/shop/views/widgets/payer_button.dart';
 import 'package:flutter/material.dart';
 
 class CartItem extends StatelessWidget {
@@ -59,24 +60,8 @@ class CartItem extends StatelessWidget {
                         )
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50.0,
-                        vertical: 10.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade700,
-                        borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(20.0),
-                          right: Radius.circular(20.0),
-                        ),
-                      ),
-                      child: const Text(
-                        "Payer",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                    const PayerButton(
+                      width: 150,
                     )
                   ],
                 ),
