@@ -1,13 +1,14 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/authentication/views/widgets/form_button.dart';
+import 'package:e_commerce_flutter/features/services/api_service.dart';
+import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/size_dropdown_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailItemScreen extends StatefulWidget {
-  static const String routeName = 'detail-product-page';
-  static const String routeURL = ':itemId';
-
   final String itemId;
 
   const DetailItemScreen({
@@ -21,11 +22,25 @@ class DetailItemScreen extends StatefulWidget {
 
 class _DetailItemScreenState extends State<DetailItemScreen> {
   final TextEditingController _textController = TextEditingController();
-
+  Product item = Product(
+    imgPath: "",
+    name: "",
+    id: 0,
+    content: "",
+    price: 0,
+  );
   @override
   void initState() {
     super.initState();
     _textController.text = "1";
+    initItem();
+  }
+
+  void initItem() async {
+    if (widget.itemId != "0") {
+      item = await context.read<ProductPostViewModel>().getItem(widget.itemId);
+      setState(() {});
+    }
   }
 
   @override
@@ -33,6 +48,7 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          color: Colors.white,
           padding: const EdgeInsets.symmetric(
             horizontal: 150,
             vertical: Sizes.size96,
@@ -40,10 +56,6 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "카테고리/세부카테고리/제품명",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
               Gaps.v32,
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,13 +64,14 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
-                        "https://static.wixstatic.com/media/8c1bd9_7ea6f67e29d44160a562b9a795cc0969~mv2.jpg/v1/fill/w_500,h_500,al_c,q_85,usm_0.66_1.00_0.01/8c1bd9_7ea6f67e29d44160a562b9a795cc0969~mv2.webp",
+                        "${ApiService.baseUri}/${item.imgPath}",
                         width: 550,
                         height: 500,
+                        fit: BoxFit.scaleDown,
                       ),
                       Gaps.v20,
                       Text(
-                        "제품 상세 정보 텍스트 ",
+                        item.content!,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -67,12 +80,12 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "귀한 당근 가방 케이스",
+                        item.name,
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
                       Gaps.v20,
                       Text(
-                        "500,000 ₩",
+                        "${item.price} ₩",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Gaps.v24,

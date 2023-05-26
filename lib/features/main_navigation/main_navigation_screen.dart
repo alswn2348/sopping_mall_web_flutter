@@ -4,7 +4,6 @@ import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
-import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/cart_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/detail_item_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
@@ -14,9 +13,14 @@ import 'package:provider/provider.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';
-
+  final String itemId;
   final String tab;
-  const MainNavigationScreen({super.key, required this.tab});
+
+  const MainNavigationScreen({
+    super.key,
+    required this.tab,
+    required this.itemId,
+  });
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -156,9 +160,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               child: AnimatedOpacity(
                 opacity: _selectedIndex != 2 ? 0 : 1,
                 duration: const Duration(milliseconds: 500),
-                child: DetailItemScreen(
-                  itemId: context.watch<ProductPostViewModel>().item.name,
-                ),
+                child: DetailItemScreen(itemId: widget.itemId),
               ),
             ),
             Offstage(
@@ -166,8 +168,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               child: AnimatedOpacity(
                 opacity: _selectedIndex != 3 ? 0 : 1,
                 duration: const Duration(milliseconds: 500),
-                child: const CartScreen(
-                  userId: "",
+                child: CartScreen(
+                  userId: widget.itemId,
                 ),
               ),
             ),

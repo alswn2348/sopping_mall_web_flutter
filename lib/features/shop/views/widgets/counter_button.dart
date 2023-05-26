@@ -25,6 +25,7 @@ class _CounterButtonState extends State<CounterButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 30.0,
       decoration: BoxDecoration(border: Border.all()),
       alignment: Alignment.topCenter,
       child: Row(
@@ -32,10 +33,10 @@ class _CounterButtonState extends State<CounterButton> {
         children: <Widget>[
           IconButton(
             icon: const Icon(
-              Icons.add,
+              Icons.remove,
               size: 12.0,
             ),
-            onPressed: _incrementCounter,
+            onPressed: _counter > 1 ? _decrementCounter : null,
           ),
           Text(
             '$_counter',
@@ -43,10 +44,10 @@ class _CounterButtonState extends State<CounterButton> {
           ),
           IconButton(
             icon: const Icon(
-              Icons.remove,
+              Icons.add,
               size: 12.0,
             ),
-            onPressed: _decrementCounter,
+            onPressed: _incrementCounter,
           ),
         ],
       ),

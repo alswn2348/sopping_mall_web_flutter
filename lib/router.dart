@@ -12,9 +12,12 @@ final router = GoRouter(
       path: "/:tab(home|shop|product-page|cart)",
       name: MainNavigationScreen.routeName,
       builder: (context, state) {
+        final itemId = state.queryParams["itemId"] ?? "0";
         final tab = state.params["tab"]!;
+
         return MainNavigationScreen(
           tab: tab,
+          itemId: itemId,
         );
       },
     ),
