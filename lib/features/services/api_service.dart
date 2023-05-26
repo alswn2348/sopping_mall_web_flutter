@@ -53,10 +53,10 @@ class ApiService {
     return product;
   }
 
-  Future<Product> getDetaileItem(String Id) async {
+  Future<Product> getDetaileItem(String id) async {
     final Product product;
     final response = await dio.get(
-      "$baseUri/item/$Id",
+      "$baseUri/item/$id",
       options: Options(
         contentType: "application/json",
       ),

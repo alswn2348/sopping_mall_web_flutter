@@ -18,6 +18,8 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
+  List<Product> items = [];
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +27,8 @@ class _ProductListState extends State<ProductList> {
   }
 
   void initProducts() async {
-    await context.read<ProductPostViewModel>().updateItem();
+    items = await context.read<ProductPostViewModel>().updateItems();
+    setState(() {});
   }
 
   @override
@@ -87,9 +90,12 @@ class _ProductListState extends State<ProductList> {
                   ),
                 ],
                 rows: List.generate(
-                  context.read<ProductPostViewModel>().list.length,
-                  (index) => productDataRow(context, index,
-                      context.read<ProductPostViewModel>().list[index]),
+                  items.length,
+                  (index) => productDataRow(
+                    context,
+                    index,
+                    items[index],
+                  ),
                 ),
               ),
             ),
