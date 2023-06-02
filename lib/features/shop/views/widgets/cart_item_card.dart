@@ -1,13 +1,17 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
+import 'package:e_commerce_flutter/features/shop/logic/models/cart_item.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/counter_button.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/payer_button.dart';
 import 'package:flutter/material.dart';
 
-class CartItem extends StatelessWidget {
-  const CartItem({
+class CartItemCard extends StatelessWidget {
+  final CartItem cart;
+
+  const CartItemCard({
     super.key,
+    required this.cart,
   });
 
   @override
@@ -23,8 +27,8 @@ class CartItem extends StatelessWidget {
                 width: Sizes.size96,
                 height: Sizes.size96,
                 child: Image.network(
-                  "${ApiService.baseUri}/img/1.jpg",
-                  fit: BoxFit.fill,
+                  "${ApiService.baseUri}/${cart.item.imgPath}",
+                  fit: BoxFit.cover,
                 ),
               ),
               Gaps.h12,
@@ -32,10 +36,10 @@ class CartItem extends StatelessWidget {
                 width: 300,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("item name"),
+                  children: [
+                    Text(cart.item.name),
                     Gaps.v12,
-                    Text("1000 ₩"),
+                    Text("${cart.item.price} ₩"),
                   ],
                 ),
               ),
@@ -48,7 +52,9 @@ class CartItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const CounterButton(),
+                        CounterButton(
+                          counter: cart.count,
+                        ),
                         TextButton(
                           onPressed: () {},
                           child: const Text(
@@ -68,11 +74,6 @@ class CartItem extends StatelessWidget {
               )
             ],
           ),
-        ),
-        Container(
-          height: Sizes.size1,
-          width: 600,
-          color: Colors.black26,
         ),
       ],
     );

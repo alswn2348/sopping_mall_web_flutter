@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 
 class CounterButton extends StatefulWidget {
-  const CounterButton({super.key});
+  final int counter;
+
+  const CounterButton({
+    super.key,
+    required this.counter,
+  });
 
   @override
   State<CounterButton> createState() => _CounterButtonState();
 }
 
 class _CounterButtonState extends State<CounterButton> {
-  int _counter = 0;
+  late int _counter;
+
+  @override
+  void initState() {
+    super.initState();
+    _counter = widget.counter;
+  }
 
   void _incrementCounter() {
     setState(() {

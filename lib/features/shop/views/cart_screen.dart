@@ -1,11 +1,14 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/shop/views/widgets/cart_item.dart';
+import 'package:e_commerce_flutter/features/shop/logic/models/cart_item.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
+import 'package:e_commerce_flutter/features/shop/views/widgets/cart_item_card.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/payer_button.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const String routeName = 'cart';
   static const String routeURL = ':userId';
 
@@ -15,6 +18,18 @@ class CartScreen extends StatelessWidget {
     super.key,
     required this.userId,
   });
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<CartItem> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +47,24 @@ class CartScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Gaps.v10,
-                binder(width: 600.0),
+                binder(width: 650.0),
                 Gaps.v10,
-                const CartItem(),
+                Expanded(
+                  child: SizedBox(
+                    width: 650,
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        cartItems = context.watch<CartViewModel>().getCartItems;
+                        return CartItemCard(
+                          cart: cartItems[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) => binder(width: 650),
+                      itemCount: context.watch<CartViewModel>().getLength,
+                    ),
+                  ),
+                ),
+                binder(width: 650.0),
                 Gaps.v32,
                 Row(
                   children: const [

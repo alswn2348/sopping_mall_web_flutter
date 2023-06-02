@@ -4,6 +4,7 @@ import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth
 import 'package:e_commerce_flutter/features/authentication/views/login_screen.dart';
 import 'package:e_commerce_flutter/features/home_screen.dart';
 import 'package:e_commerce_flutter/features/main_navigation/navigation_tab.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/cart_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/detail_item_screen.dart';
 import 'package:e_commerce_flutter/features/shop/views/shop_screen.dart';
@@ -52,11 +53,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _onTap(0);
   }
 
-  void _onCartTap() {
-    context.go("/cart");
-    setState(() {
-      _selectedIndex = 3;
-    });
+  void _onCartTap() async {
+    final String token = context.read<AuthenticartionViewModel>().updateToken;
+
+    if (token != "") {
+      var cartItems =
+          await context.read<CartViewModel>().updateCartItems(token);
+      if (!mounted) return;
+      context.go("/cart");
+      setState(() {
+        _selectedIndex = 3;
+      });
+    }
   }
 
   @override
@@ -130,7 +138,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                             size: Sizes.size20,
                             color: Colors.black,
                           ),
-                        ),
+                        )
                       ],
                     )
                   ],

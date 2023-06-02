@@ -1,6 +1,7 @@
 import 'package:e_commerce_flutter/constants/sizes.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/repository/auth_repository.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 
 import 'package:e_commerce_flutter/router.dart';
@@ -20,6 +21,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductPostViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartViewModel(),
         ),
       ],
       child: const MyApp(),
