@@ -40,7 +40,7 @@ class ApiService {
   }
 
   Future<List<Product>> getItems() async {
-    final List<Product> product = [];
+    final List<Product> products = [];
     final response = await dio.get(
       "$baseUri/items",
       options: Options(
@@ -48,9 +48,9 @@ class ApiService {
       ),
     );
     for (var item in response.data) {
-      product.add(Product.fromJson(item));
+      products.add(Product.fromJson(item));
     }
-    return product;
+    return products;
   }
 
   Future<Product> getDetaileItem(String id) async {
@@ -125,20 +125,22 @@ class ApiService {
     }
   }
 
-  Future<void> getCartItem(int count, String token) async {
-    await dio.get(
+  Future<List> getCartItems(String token) async {
+    var resp = await dio.get(
       "$baseUri/user/cart/items",
       options: Options(headers: {
         "authorization": "Bearer $token",
       }, contentType: "application/json"),
     );
+
+    return resp.data['content'];
   }
 
-  Future<void> addCartItem(int id, int count, String token) async {
+  Future<void> addCartItem(int id, String count, String token) async {
     await dio.post(
       "$baseUri/user/cart/items/$id",
       data: jsonEncode(
-        {"count": "$count"},
+        {"count": count},
       ),
       options: Options(headers: {
         "authorization": "Bearer $token",
@@ -146,7 +148,7 @@ class ApiService {
     );
   }
 
-  Future<void> removeCartItem(int id, int count, String token) async {
+  Future<void> deleteCartItem(int id, int count, String token) async {
     await dio.delete(
       "$baseUri/user/cart/items/$id",
       data: jsonEncode(
