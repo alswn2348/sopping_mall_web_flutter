@@ -63,7 +63,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           height: 200,
                           child: Image.network(
                             "${ApiService.baseUri}/${products[index].imgPath}",
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         Gaps.v10,

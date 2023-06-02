@@ -33,10 +33,10 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
   void initState() {
     super.initState();
     _textController.text = "1";
-    initItem();
+    checkItem();
   }
 
-  void initItem() async {
+  void checkItem() async {
     if (widget.itemId != "0") {
       item = await context.read<ProductPostViewModel>().getItem(widget.itemId);
       setState(() {});
@@ -65,9 +65,9 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                     children: [
                       Image.network(
                         "${ApiService.baseUri}/${item.imgPath}",
-                        width: 550,
+                        width: 500,
                         height: 500,
-                        fit: BoxFit.scaleDown,
+                        fit: BoxFit.cover,
                       ),
                       Gaps.v20,
                       Text(
@@ -76,6 +76,7 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                       ),
                     ],
                   ),
+                  Gaps.h40,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -127,10 +128,11 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                           Gaps.h32,
                           Container(
                             decoration: BoxDecoration(
-                                border: Border.all(
-                              width: 0.7,
-                              color: Colors.black,
-                            )),
+                              border: Border.all(
+                                width: 0.7,
+                                color: Colors.black,
+                              ),
+                            ),
                             width: 52,
                             height: 52,
                             child: IconButton(
