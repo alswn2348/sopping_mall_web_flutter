@@ -10,6 +10,13 @@ class CartViewModel extends ChangeNotifier {
 
   List<CartItem> get getCartItems => _cartItems;
   int get getLength => _cartItems.length;
+  int get price {
+    int total = _cartItems.fold(
+        0,
+        (previousValue, element) =>
+            previousValue + (element.item.price! * element.count));
+    return total;
+  }
 
   Future<List<CartItem>> updateCartItems(String token) async {
     var jsonCartItem = await api.getCartItems(token);

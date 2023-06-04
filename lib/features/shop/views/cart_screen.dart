@@ -29,13 +29,15 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void initState() {
-    initCartItems();
+    // initCartItems();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    int totalPrice = context.watch<CartViewModel>().price;
+
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -60,7 +62,7 @@ class _CartScreenState extends State<CartScreen> {
                         builder: (context, child) {
                           cartItems =
                               context.read<CartViewModel>().getCartItems;
-                          print(cartItems.length);
+
                           return ListView.separated(
                             itemBuilder: (context, index) {
                               return CartItemCard(
@@ -106,7 +108,7 @@ class _CartScreenState extends State<CartScreen> {
                   Gaps.v40,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text("Subtotal"), Text("1000  ₩")],
+                    children: [const Text("Subtotal"), Text("$totalPrice ₩")],
                   ),
                   Gaps.v16,
                   Row(
@@ -120,11 +122,11 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Total",
+                        "total",
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
-                        "1200  ₩",
+                        "${totalPrice + 200}  ₩",
                         style: Theme.of(context).textTheme.titleLarge,
                       )
                     ],
