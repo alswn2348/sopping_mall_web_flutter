@@ -1,10 +1,14 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/cart_item.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/counter_button.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/payer_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem cart;
@@ -56,7 +60,7 @@ class CartItemCard extends StatelessWidget {
                           counter: cart.count,
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => _onDeleteTap(context),
                           child: const Text(
                             "X",
                             style: TextStyle(
@@ -77,5 +81,13 @@ class CartItemCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onDeleteTap(BuildContext context) async {
+    final String token = context.read<AuthenticartionViewModel>().updateToken;
+
+    if (token != "") {
+      await context.read<CartViewModel>().removeItem(cart.cartId, token);
+    }
   }
 }

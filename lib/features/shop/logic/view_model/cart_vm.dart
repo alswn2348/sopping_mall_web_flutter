@@ -20,8 +20,13 @@ class CartViewModel extends ChangeNotifier {
     return _cartItems;
   }
 
-  Future<void> addItem(int id, String count, String token) async {
+  Future<void> addItem(String id, String count, String token) async {
     await api.addCartItem(id, count, token);
-    notifyListeners();
+    updateCartItems(token);
+  }
+
+  Future<void> removeItem(int id, String token) async {
+    await api.deleteCartItem(id, token);
+    updateCartItems(token);
   }
 }

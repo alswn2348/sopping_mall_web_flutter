@@ -136,7 +136,7 @@ class ApiService {
     return resp.data['content'];
   }
 
-  Future<void> addCartItem(int id, String count, String token) async {
+  Future<void> addCartItem(String id, String count, String token) async {
     await dio.post(
       "$baseUri/user/cart/items/$id",
       data: jsonEncode(
@@ -148,12 +148,9 @@ class ApiService {
     );
   }
 
-  Future<void> deleteCartItem(int id, int count, String token) async {
+  Future<void> deleteCartItem(int id, String token) async {
     await dio.delete(
       "$baseUri/user/cart/items/$id",
-      data: jsonEncode(
-        {"count": "$count"},
-      ),
       options: Options(headers: {
         "authorization": "Bearer $token",
       }, contentType: "application/json"),

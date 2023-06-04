@@ -1,5 +1,6 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/cart_item.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/cart_item_card.dart';
@@ -28,6 +29,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void initState() {
+    initCartItems();
+
     super.initState();
   }
 
@@ -52,16 +55,23 @@ class _CartScreenState extends State<CartScreen> {
                 Expanded(
                   child: SizedBox(
                     width: 650,
-                    child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        cartItems = context.watch<CartViewModel>().getCartItems;
-                        return CartItemCard(
-                          cart: cartItems[index],
-                        );
-                      },
-                      separatorBuilder: (context, index) => binder(width: 650),
-                      itemCount: context.watch<CartViewModel>().getLength,
-                    ),
+                    child: AnimatedBuilder(
+                        animation: context.watch<CartViewModel>(),
+                        builder: (context, child) {
+                          cartItems =
+                              context.read<CartViewModel>().getCartItems;
+                          print(cartItems.length);
+                          return ListView.separated(
+                            itemBuilder: (context, index) {
+                              return CartItemCard(
+                                cart: cartItems[index],
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                binder(width: 650),
+                            itemCount: cartItems.length,
+                          );
+                        }),
                   ),
                 ),
                 binder(width: 650.0),
@@ -140,5 +150,14 @@ class _CartScreenState extends State<CartScreen> {
       width: width,
       color: Colors.black26,
     );
+  }
+
+  void initCartItems() async {
+    final String token = context.read<AuthenticartionViewModel>().updateToken;
+
+    if (token != "") {
+      cartItems = await context.read<CartViewModel>().updateCartItems(token);
+      setState(() {});
+    }
   }
 }

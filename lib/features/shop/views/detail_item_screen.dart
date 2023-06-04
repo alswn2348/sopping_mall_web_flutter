@@ -1,8 +1,10 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
+import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/authentication/views/widgets/form_button.dart';
 import 'package:e_commerce_flutter/features/services/api_service.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
+import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/size_dropdown_menu.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +138,7 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
                             width: 52,
                             height: 52,
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: _onCotainTap,
                                 icon: const Icon(Icons.shopping_bag_outlined)),
                           )
                         ],
@@ -157,5 +159,35 @@ class _DetailItemScreenState extends State<DetailItemScreen> {
         ),
       ),
     );
+  }
+
+  void _onCotainTap() async {
+    final count = _textController.text;
+
+    final String token = context.read<AuthenticartionViewModel>().updateToken;
+
+    if (token != "") {
+      await context.read<CartViewModel>().addItem(widget.itemId, count, token);
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("장바구니에 추가되었습니다."),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const FormButton(
+                  disabled: false,
+                  title: "닫기",
+                ),
+              )
+            ],
+          );
+        },
+      );
+    }
   }
 }
