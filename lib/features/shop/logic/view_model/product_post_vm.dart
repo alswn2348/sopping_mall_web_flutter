@@ -21,33 +21,31 @@ class ProductPostViewModel extends ChangeNotifier {
     return _product;
   }
 
-  Future<void> addItem(Product data, String token) async {
+  Future<void> addItem(Product data) async {
     _products.add(data);
-    await api.addItem(data.toJson(), token);
+    await api.addItem(data.toJson());
     notifyListeners();
   }
 
   Future<void> deleteItem({
     required int index,
     required int id,
-    required String token,
   }) async {
     _products.removeAt(index);
-    await api.deleteItem(id, token);
+    await api.deleteItem(id);
     notifyListeners();
   }
 
   void modifyItem({
     required int index,
     required Product data,
-    required String token,
   }) async {
     _products[index] = data;
-    await api.putItem(data, token);
+    await api.putItem(data);
     notifyListeners();
   }
 
-  Future<void> updateImage(List<int> file, String name, String token) async {
-    await api.uploadFile(file, name, token);
+  Future<void> updateImage(List<int> file, String name) async {
+    await api.uploadFile(file, name);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/cart_item.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/cart_vm.dart';
 import 'package:e_commerce_flutter/features/shop/views/widgets/cart_item_card.dart';
@@ -155,11 +154,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void initCartItems() async {
-    final String token = context.read<AuthenticartionViewModel>().updateToken;
-
-    if (token != "") {
-      cartItems = await context.read<CartViewModel>().updateCartItems(token);
-      setState(() {});
-    }
+    cartItems = await context.read<CartViewModel>().updateCartItems();
+    setState(() {});
   }
 }

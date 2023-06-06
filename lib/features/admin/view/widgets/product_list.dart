@@ -151,10 +151,8 @@ DataRow productDataRow(BuildContext context, int index, Product product) {
 }
 
 onDeleteTap(BuildContext context, int index, int id) {
-  var token = context.read<AuthenticartionViewModel>().updateToken;
   context.read<ProductPostViewModel>().deleteItem(
         index: index,
         id: id,
-        token: token,
       );
 }

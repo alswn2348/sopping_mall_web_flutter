@@ -1,7 +1,6 @@
 import 'package:e_commerce_flutter/constants/color.dart';
 import 'package:e_commerce_flutter/constants/gaps.dart';
 import 'package:e_commerce_flutter/constants/sizes.dart';
-import 'package:e_commerce_flutter/features/authentication/logic/view_model/auth_vm.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:e_commerce_flutter/features/shop/logic/view_model/product_post_vm.dart';
 import 'package:e_commerce_flutter/utils.dart';
@@ -64,7 +63,6 @@ class _EditButtonState extends State<EditButton> {
 
   void _onPressedAdd(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final String token = context.read<AuthenticartionViewModel>().updateToken;
     MediaInfo? mediaData;
 
     Product formData = Product(
@@ -77,13 +75,12 @@ class _EditButtonState extends State<EditButton> {
     }
 
     void addProduct() {
-      context.read<ProductPostViewModel>().addItem(formData, token);
+      context.read<ProductPostViewModel>().addItem(formData);
     }
 
     void modifyProduct(int index, Product product) {
       context.read<ProductPostViewModel>().modifyItem(
             index: index,
-            token: token,
             data: product,
           );
     }
@@ -105,9 +102,10 @@ class _EditButtonState extends State<EditButton> {
               : modifyProduct(widget.index!, formData);
           if (mounted && mediaData != null) {
             dynamic fileBytes = mediaData!.data;
-            context
-                .read<ProductPostViewModel>()
-                .updateImage(fileBytes, mediaData!.fileName!, token);
+            context.read<ProductPostViewModel>().updateImage(
+                  fileBytes,
+                  mediaData!.fileName!,
+                );
           }
           Navigator.of(context).pop();
         }

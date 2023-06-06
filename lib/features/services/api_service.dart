@@ -2,33 +2,34 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:e_commerce_flutter/features/authentication/logic/models/user.dart';
+import 'package:e_commerce_flutter/features/services/dio.dart';
 import 'package:e_commerce_flutter/features/shop/logic/models/product.dart';
 import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   static var dio = Dio();
+
   static const String baseUri = "http://121.172.37.25:8080";
 
   Future<User> login(Map<String, String> data) async {
-    try {
-      final response = await dio.post(
-        "$baseUri/login",
-        data: jsonEncode(data),
-        options: Options(
-          contentType: "application/json",
-        ),
-      );
-      final user = User.formJson(
-        response.data,
-      );
-      return user;
-    } catch (e) {
-      Exception(e);
-    }
-    return Future.value(User(token: ""));
+    dio.interceptors.add(ApiInterceptor());
+
+    final response = await dio.post(
+      "$baseUri/login",
+      data: jsonEncode(data),
+      options: Options(
+        contentType: "application/json",
+      ),
+    );
+    final user = User.formJson(
+      response.data,
+    );
+    return user;
   }
 
   Future<Response<dynamic>> register(Map<String, String> data) async {
+    dio.interceptors.add(ApiInterceptor());
+
     final response = await dio.post(
       "$baseUri/register",
       data: jsonEncode(data),
@@ -40,7 +41,10 @@ class ApiService {
   }
 
   Future<List<Product>> getItems() async {
+    dio.interceptors.add(ApiInterceptor());
+
     final List<Product> products = [];
+
     final response = await dio.get(
       "$baseUri/items",
       options: Options(
@@ -54,7 +58,10 @@ class ApiService {
   }
 
   Future<Product> getDetaileItem(String id) async {
+    dio.interceptors.add(ApiInterceptor());
+
     final Product product;
+
     final response = await dio.get(
       "$baseUri/item/$id",
       options: Options(
@@ -65,43 +72,50 @@ class ApiService {
     return product;
   }
 
-  Future<Response<dynamic>> addItem(
-      Map<String, String> data, String token) async {
+  Future<Response<dynamic>> addItem(Map<String, String> data) async {
+    dio.interceptors.add(ApiInterceptor());
+
     final response = await dio.post(
       "$baseUri/admin/additem",
       data: jsonEncode(data),
       options: Options(headers: {
-        "authorization": "Bearer $token",
+        "authorization": "true",
       }, contentType: "application/json"),
     );
 
     return response;
   }
 
-  Future<void> deleteItem(int id, String token) async {
+  Future<void> deleteItem(int id) async {
+    dio.interceptors.add(ApiInterceptor());
+
     await dio.delete(
       "$baseUri/admin/$id",
       options: Options(
         headers: {
-          "authorization": "Bearer $token",
+          "authorization": "true",
         },
       ),
     );
   }
 
-  Future<void> putItem(Product data, String token) async {
+  Future<void> putItem(Product data) async {
+    dio.interceptors.add(ApiInterceptor());
+
     await dio.put(
       "$baseUri/admin/${data.id}",
       data: jsonEncode(
         data.toJson(),
       ),
       options: Options(headers: {
-        "authorization": "Bearer $token",
+        "authorization": "true",
       }, contentType: "application/json"),
     );
   }
 
-  Future<void> uploadFile(List<int> file, String fileName, String token) async {
+  Future<void> uploadFile(List<int> file, String fileName) async {
+    dio.interceptors.add(ApiInterceptor());
+
     FormData formData = FormData.fromMap(
       {
         "image": MultipartFile.fromBytes(
@@ -112,47 +126,51 @@ class ApiService {
       },
     );
 
-    try {
-      await dio.post(
-        "$baseUri/admin/fileSystem",
-        data: formData,
-        options: Options(
-          headers: {"authorization": "Bearer $token"},
-        ),
-      );
-    } catch (e) {
-      Exception(e);
-    }
+    await dio.post(
+      "$baseUri/admin/fileSystem",
+      data: formData,
+      options: Options(
+        headers: {
+          "authorization": "true",
+        },
+      ),
+    );
   }
 
-  Future<List> getCartItems(String token) async {
+  Future<List> getCartItems() async {
+    dio.interceptors.add(ApiInterceptor());
+
     var resp = await dio.get(
       "$baseUri/user/cart/items",
       options: Options(headers: {
-        "authorization": "Bearer $token",
+        "authorization": "true",
       }, contentType: "application/json"),
     );
 
     return resp.data['content'];
   }
 
-  Future<void> addCartItem(String id, String count, String token) async {
+  Future<void> addCartItem(String id, String count) async {
+    dio.interceptors.add(ApiInterceptor());
+
     await dio.post(
       "$baseUri/user/cart/items/$id",
       data: jsonEncode(
         {"count": count},
       ),
       options: Options(headers: {
-        "authorization": "Bearer $token",
+        "authorization": "true",
       }, contentType: "application/json"),
     );
   }
 
-  Future<void> deleteCartItem(int id, String token) async {
+  Future<void> deleteCartItem(int id) async {
+    dio.interceptors.add(ApiInterceptor());
+
     await dio.delete(
       "$baseUri/user/cart/items/$id",
       options: Options(headers: {
-        "authorization": "Bearer $token",
+        "authorization": "true",
       }, contentType: "application/json"),
     );
   }

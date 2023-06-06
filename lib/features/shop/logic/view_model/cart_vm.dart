@@ -18,8 +18,8 @@ class CartViewModel extends ChangeNotifier {
     return total;
   }
 
-  Future<List<CartItem>> updateCartItems(String token) async {
-    var jsonCartItem = await api.getCartItems(token);
+  Future<List<CartItem>> updateCartItems() async {
+    var jsonCartItem = await api.getCartItems();
 
     _cartItems =
         jsonCartItem.map<CartItem>((e) => CartItem.fromJson(e)).toList();
@@ -27,13 +27,13 @@ class CartViewModel extends ChangeNotifier {
     return _cartItems;
   }
 
-  Future<void> addItem(String id, String count, String token) async {
-    await api.addCartItem(id, count, token);
-    updateCartItems(token);
+  Future<void> addItem(String id, String count) async {
+    await api.addCartItem(id, count);
+    updateCartItems();
   }
 
-  Future<void> removeItem(int id, String token) async {
-    await api.deleteCartItem(id, token);
-    updateCartItems(token);
+  Future<void> removeItem(int id) async {
+    await api.deleteCartItem(id);
+    updateCartItems();
   }
 }

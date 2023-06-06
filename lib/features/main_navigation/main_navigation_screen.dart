@@ -54,17 +54,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   void _onCartTap() async {
-    final String token = context.read<AuthenticartionViewModel>().updateToken;
+    var cartItems = await context.read<CartViewModel>().updateCartItems();
 
-    if (token != "") {
-      var cartItems =
-          await context.read<CartViewModel>().updateCartItems(token);
-      if (!mounted) return;
-      context.go("/cart");
-      setState(() {
-        _selectedIndex = 3;
-      });
-    }
+    if (!mounted) return;
+    context.go("/cart");
+    setState(() {
+      _selectedIndex = 3;
+    });
   }
 
   @override
